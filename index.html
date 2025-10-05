@@ -6,16 +6,12 @@
   <meta name="color-scheme" content="dark light" />
   <title>צא מזה — המשחק שכולם מדברים עליו!</title>
 
-  <!-- ===== Brand / Fonts =====
-       שימי את קובץ הפונט כאן: /fonts/Noot-Regular.woff2
-       מומלץ לשים את תמונת המוצר ב: /assets/tsa-meze.jpg -->
-  <style>
-    @font-face{
-      font-family:"Noot";
-      src:url("fonts/Noot-Regular.woff2") format("woff2");
-      font-weight:400; font-style:normal; font-display:swap;
-    }
+  <!-- Google Font חלופי במקום Noot -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;900&display=swap" rel="stylesheet">
 
+  <style>
     *{box-sizing:border-box; margin:0; padding:0}
     :root{
       --bg-dark:#0f1420;
@@ -30,7 +26,7 @@
     }
 
     body{
-      font-family:'Noot','Assistant','Arial','Helvetica',sans-serif;
+      font-family:'Assistant','Arial','Helvetica',sans-serif;
       color:var(--text);
       background: linear-gradient(135deg,var(--bg-dark),var(--bg-darker));
       min-height:100vh; overflow-x:hidden; line-height:1.6;
@@ -38,9 +34,7 @@
     .container{max-width:1200px;margin:0 auto;padding:20px}
 
     /* ================= BACKGROUND LAYERS ================= */
-    .bg{
-      position:fixed; inset:0; overflow:hidden; z-index:-1; background:#000;
-    }
+    .bg{ position:fixed; inset:0; overflow:hidden; z-index:-1; background:#000; }
     .bg .gradient{
       position:absolute; inset:0;
       background:radial-gradient(60% 90% at 50% 0%, rgba(0,108,180,.18), transparent 60%),
@@ -81,17 +75,41 @@
       text-shadow:0 8px 28px rgba(0,0,0,.45)
     }
     .highlight{ color:var(--brand-yellow); text-shadow:0 0 18px rgba(254,223,72,.45) }
-    .subtitle{ font-size:clamp(18px,3vw,24px); color:var(--brand-blue); margin-bottom:24px; font-weight:800 }
+    .subtitle{ font-size:clamp(18px,3vw,24px); color:var(--brand-blue); margin-bottom:28px; font-weight:800 }
     .muted{ color:var(--muted) }
+
+    /* HERO buttons (כמו בדוגמה) */
+    .hero-actions{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+    .btn-hero-buy{
+      display:inline-block; padding:16px 34px; border-radius:999px; font-weight:900;
+      background:radial-gradient(120% 160% at 50% 10%, #fff7b6 0%, var(--brand-yellow) 28%, #e1c93c 100%);
+      color:#111; text-decoration:none; box-shadow:0 0 30px rgba(254,223,72,.45); border:0; font-size:20px;
+      transition:.2s transform, .2s box-shadow;
+    }
+    .btn-hero-buy:hover{ transform:translateY(-2px); box-shadow:0 0 40px rgba(254,223,72,.6) }
+    .btn-hero-learn{
+      display:inline-block; padding:14px 32px; border-radius:999px; font-weight:900;
+      background:transparent; color:var(--brand-blue); border:2px solid var(--brand-blue);
+      text-decoration:none; font-size:20px; transition:.2s background,.2s color,.2s transform, .2s box-shadow;
+      box-shadow:0 0 20px rgba(0,108,180,.25) inset;
+    }
+    .btn-hero-learn:hover{ background:var(--brand-blue); color:#000; transform:translateY(-2px) }
 
     .section{ padding:80px 20px; max-width:900px; margin:0 auto }
     .section h2{ font-size:clamp(28px,5vw,42px); margin-bottom:22px; color:var(--brand-yellow) }
     .section p{ font-size:clamp(16px,2.5vw,20px); margin-bottom:18px; max-width:70ch; margin-inline:auto }
 
-    .features{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; margin:48px 0 }
-    .feature-card{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:26px; text-align:center; backdrop-filter:blur(8px); transition:.25s }
+    /* Features 2x2 קבוע */
+    .features{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr)); /* 2 עמודות תמיד */
+      gap:18px;
+      margin:30px auto 8px;
+      max-width:760px; /* שומר על 2x2 יפה */
+    }
+    .feature-card{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; text-align:center; backdrop-filter:blur(8px); transition:.25s }
     .feature-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,108,180,.35); border-color:rgba(0,108,180,.45) }
-    .feature-icon{ font-size:44px; margin-bottom:10px }
+    .feature-icon{ font-size:36px; margin-bottom:8px }
 
     .story{ background:linear-gradient(135deg, rgba(0,108,180,.2) 0%, transparent 100%); border-radius:20px; padding:54px 36px; margin:72px 0; text-align:center; border:1px solid var(--border) }
 
@@ -108,7 +126,6 @@
     .cta-button{ display:inline-block; padding:20px 48px; border-radius:999px; font-size:clamp(18px,2.6vw,24px); font-weight:900; text-decoration:none; transition:.25s; position:relative }
     .cta-primary{ background:linear-gradient(135deg,var(--brand-blue),#0b8bdc); color:#fff; box-shadow:0 14px 34px rgba(0,108,180,.45) }
     .cta-primary:hover{ transform:translateY(-2px) }
-    .cta-primary[data-hover]:hover::after{ content:attr(data-hover); position:absolute; top:100%; left:50%; transform:translateX(-50%); margin-top:8px; font-size:14px; color:var(--muted); font-weight:700 }
     .cta-secondary{ border:2px solid var(--brand-yellow); color:var(--brand-yellow); background:transparent }
     .cta-secondary:hover{ background:rgba(254,223,72,.1) }
 
@@ -125,14 +142,9 @@
     .faq details[open] summary::after{ transform:rotate(-90deg) }
     .faq .answer{ color:var(--muted); padding-top:10px }
 
-    @media (max-width:768px){
-      .hero{ padding:90px 16px }
-      .section{ padding:60px 16px }
-      .story{ padding:40px 16px }
-      .cta-section{ padding:70px 16px }
-      .cta-button{ padding:18px 40px }
-      .features{ gap:16px }
-      .feature-card{ padding:20px }
+    @media (max-width:480px){
+      .btn-hero-buy{font-size:18px;padding:14px 28px}
+      .btn-hero-learn{font-size:18px;padding:12px 26px}
     }
   </style>
 </head>
@@ -145,54 +157,29 @@
     <div class="glow blue"></div>
     <canvas id="particles" class="particles" style="position:absolute; inset:0; pointer-events:none;"></canvas>
 
-    <!-- Floating SVG icons -->
-    <!-- Spade -->
+    <!-- Floating SVG icons (כמה דוגמאות) -->
     <div class="float-icon" style="left:10%; top:15%; --dur:8s; --delay:0s">
       <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
-        <path d="M32 6C20 18 10 25 10 34a10 10 0 1 0 20 0h4a10 10 0 1 0 20 0C54 25 44 18 32 6zM27 40h10l-4 10h-6l0-10z"/>
+        <path d="M32 6C20 18 10 25 10 34a10 10 0 1 0 20 0h4a10 10 0 1 0 20 0C54 25 44 18 32 6zM27 40h10l-4 10h-6z"/>
       </svg>
     </div>
-    <!-- Heart -->
     <div class="float-icon" style="left:80%; top:65%; --dur:11s; --delay:.5s">
       <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
         <path d="M32 56s-4-3-10-8C12 42 6 36 6 28a12 12 0 0 1 22-7 12 12 0 0 1 22 7c0 8-6 14-16 20-6 5-10 8-10 8z"/>
       </svg>
     </div>
-    <!-- Diamond -->
     <div class="float-icon" style="left:25%; top:40%; --dur:7s; --delay:1.5s">
       <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
         <path d="M32 4 58 32 32 60 6 32 32 4z"/>
       </svg>
     </div>
-    <!-- Club -->
     <div class="float-icon" style="left:70%; top:45%; --dur:8.5s; --delay:2.5s">
       <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
         <path d="M22 26a10 10 0 1 1 18-6 10 10 0 1 1 8 18 10 10 0 1 1-18 6h-4l-2 10h-6l2-10a10 10 0 0 1 8-18z"/>
       </svg>
     </div>
-    <!-- Dice -->
-    <div class="float-icon" style="left:50%; top:10%; --dur:8.5s; --delay:2s">
-      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
-        <rect x="10" y="10" width="44" height="44" rx="8" ry="8" stroke="none"/>
-        <circle cx="22" cy="22" r="3" fill="#000"/>
-        <circle cx="32" cy="32" r="3" fill="#000"/>
-        <circle cx="42" cy="42" r="3" fill="#000"/>
-      </svg>
-    </div>
-    <!-- Wine glass -->
-    <div class="float-icon" style="left:85%; top:20%; --dur:10s; --delay:1s">
-      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
-        <path d="M18 6h28c0 10-5 18-14 18S18 16 18 6zm13 18h2v20h10v4H16v-4h10V24z"/>
-      </svg>
-    </div>
-    <!-- Beer mug -->
-    <div class="float-icon" style="left:5%; top:85%; --dur:9.5s; --delay:1s">
-      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
-        <path d="M12 18h28v34H12zM40 22h8a6 6 0 0 1 0 12h-8" stroke="none"/>
-      </svg>
-    </div>
 
-    <!-- Twinkles will be injected by JS -->
+    <!-- Twinkles generated by JS -->
     <div id="twinkles"></div>
   </div>
 
@@ -201,17 +188,18 @@
     <!-- HERO -->
     <section class="hero">
       <h1>🎯 <span class="highlight">צא מזה</span> – המשחק שכולם מדברים עליו!</h1>
-      <p class="subtitle">משחק קלפים חברי, קורע ומפתיע — משימות, טוויסטים ושאלות נועזות עם נשיקה ישראלית. 🍻</p>
-      <p class="muted" style="font-size:20px;margin-top:10px">הקוביה קובעת, אך הקלף מחליט — ערב חדש בכל חפיסה.</p>
+      <p class="subtitle">המשחק שיהפוך כל ערב לבלתי נשכח</p>
 
-      <div style="display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap">
-        <a href="#buy" class="cta-button cta-primary" data-hover="יחידה מוגבלת בהשקה — קח/י ערב שונה">🔥 כן! אני רוצה לצאת מזה</a>
-        <a href="#" class="cta-button cta-secondary" id="demoBtn">🕹 תן/י לי קלף דמו — הדגמה</a>
+      <div class="hero-actions">
+        <a href="#buy" class="btn-hero-buy">קנה עכשיו</a>
+        <a href="#features" class="btn-hero-learn">למד עוד</a>
       </div>
+
+      <p class="muted" style="font-size:18px;margin-top:16px">הקוביה קובעת, אך הקלף מחליט — ערב חדש בכל חפיסה.</p>
     </section>
 
     <!-- איך משחקים -->
-    <section class="section">
+    <section class="section" id="how">
       <h2>🍻 איך משחקים?</h2>
       <p>
         שלפו קלף, קראו בקול, ובצעו את מה שכתוב עליו. כל קלף יכניס אתכם לסיטואציה חדשה –
@@ -220,11 +208,11 @@
       </p>
     </section>
 
-    <!-- למה תתאהבו -->
-    <section class="section">
+    <!-- למה תתאהבו 2x2 -->
+    <section class="section" id="features">
       <h2>💬 למה תתאהבו בזה?</h2>
       <div class="features">
-        <div class="feature-card"><div class="feature-icon">❗</div><p>כל ערב הופך להרפתקה שונה</p></div>
+        <div class="feature-card"><div class="feature-icon">🎲</div><p>כל ערב הופך להרפתקה שונה</p></div>
         <div class="feature-card"><div class="feature-icon">🥂</div><p>מתאים לכל חבורה – קטנה או גדולה</p></div>
         <div class="feature-card"><div class="feature-icon">🤯</div><p>אין לדעת מה הקלף הבא יביא</p></div>
         <div class="feature-card"><div class="feature-icon">💛</div><p>צחוק שמחבר בין אנשים</p></div>
@@ -236,12 +224,13 @@
       <h2>🌟 מאחורי הקלפים – סיפור אמיתי</h2>
       <p>"צא מזה" נולד מערבים של חברים, שיחות עמוקות וצחוקים בלי סוף — וגם מהרצון לזכור:</p>
       <p class="dedication">להיות אדיבים. לפרגן. לשמור אחד על השני.</p>
-      <div class="be-kind">Be Kind. As Balva. ❤</div>
+      <div class="be-kind" style="display:inline-block; padding:12px 24px; background:linear-gradient(135deg,var(--brand-blue),#0b8bdc); border-radius:999px; font-weight:900">
+        Be Kind. As Balva. ❤
+      </div>
     </section>
 
     <!-- תמונת מוצר -->
     <div class="product-image">
-      <!-- מומלץ לשים את הקובץ בשם באנגלית ללא רווחים: /assets/tsa-meze.jpg -->
       <img src="assets/tsa-meze.jpg" alt="צא מזה - משחק הקלפים" />
     </div>
 
@@ -268,8 +257,6 @@
         <img src="assets/tsa-meze.jpg" alt="UGC 2" />
         <img src="assets/tsa-meze.jpg" alt="UGC 3" />
         <img src="assets/tsa-meze.jpg" alt="UGC 4" />
-        <img src="assets/tsa-meze.jpg" alt="UGC 5" />
-        <img src="assets/tsa-meze.jpg" alt="UGC 6" />
       </div>
     </section>
 
@@ -304,7 +291,7 @@
     </section>
   </div>
 
-  <!-- ====== Minimal JS for background + modal demo ====== -->
+  <!-- ====== Minimal JS for background ====== -->
   <script>
     // Canvas particles (small rotating squares)
     (function(){
@@ -329,24 +316,19 @@
           vr: (Math.random()-.5)*.02
         });
       }
-
-      function step(){
+      (function step(){
         ctx.clearRect(0,0,c.width,c.height);
         ctx.globalAlpha = 0.3;
         particles.forEach(p=>{
           p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
           if(p.x<0||p.x>c.width) p.vx*=-1;
           if(p.y<0||p.y>c.height) p.vy*=-1;
-          ctx.save();
-          ctx.translate(p.x,p.y);
-          ctx.rotate(p.rot);
-          ctx.fillStyle=p.color;
-          ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
+          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+          ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
           ctx.restore();
         });
         requestAnimationFrame(step);
-      }
-      step();
+      })();
     })();
 
     // Twinkles
@@ -363,15 +345,6 @@
         wrap.appendChild(d);
       }
     })();
-
-    // Simple demo modal (optional)
-    const demoBtn = document.getElementById('demoBtn');
-    if(demoBtn){
-      demoBtn.addEventListener('click', function(e){
-        e.preventDefault();
-        alert('קלף דמו: "כל מי שמחזיק טלפון ביד — שותה." (דוגמה 😅)');
-      });
-    }
   </script>
 </body>
 </html>
