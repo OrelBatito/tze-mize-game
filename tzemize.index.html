@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>צא מזה - המשחק שכולם מדברים עליו!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #1a1a2e;
+            --bg-darker: #000000;
+            --text-white: #ffffff;
+            --accent-orange: #fa500f;
+            --accent-red: #cc2936;
+            --text-gray: #333333;
+            --brown-dark: #4d3f47;
+            --yellow: #ffd700;
+        }
+
+        body {
+            font-family: 'Assistant', 'Arial', 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 120px 20px;
+            position: relative;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent-orange) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: pulse 3s infinite;
+        }
+
+        h1 {
+            font-size: clamp(42px, 8vw, 72px);
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .highlight {
+            color: var(--yellow);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: var(--accent-orange);
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 80px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section h2 {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 30px;
+            color: var(--accent-orange);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section p {
+            font-size: clamp(16px, 2.5vw, 20px);
+            margin-bottom: 20px;
+            max-width: 70ch;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(250, 80, 15, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(250, 80, 15, 0.3);
+            border-color: var(--accent-orange);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* Story Section */
+        .story {
+            background: linear-gradient(135deg, rgba(77, 63, 71, 0.2) 0%, transparent 100%);
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 80px 0;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .story h2 {
+            justify-content: center;
+        }
+
+        .dedication {
+            font-size: clamp(20px, 3vw, 28px);
+            color: var(--yellow);
+            margin: 30px 0;
+            font-weight: bold;
+        }
+
+        .be-kind {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: heartbeat 2s infinite;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .price {
+            font-size: clamp(48px, 8vw, 72px);
+            font-weight: bold;
+            color: var(--yellow);
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 25px 60px;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+            color: var(--text-white);
+            text-decoration: none;
+            font-size: clamp(20px, 3vw, 28px);
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(204, 41, 54, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(204, 41, 54, 0.7);
+        }
+
+        /* Product Image */
+        .product-image {
+            text-align: center;
+            margin: 80px 0;
+            position: relative;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            width: min(600px, 90vw);
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.05);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 80px 20px;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .story {
+                padding: 40px 20px;
+            }
+
+            .cta-section {
+                padding: 60px 20px;
+            }
+
+            .cta-button {
+                padding: 20px 40px;
+            }
+
+            .features {
+                gap: 20px;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+            }
+        }
+
+        /* Emoji support */
+        .emoji {
+            font-size: 1.2em;
+            margin: 0 5px;
+        }
+
+        /* Decorative elements */
+        .glow-text {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px var(--accent-orange), 0 0 20px var(--accent-orange);
+            }
+            to {
+                text-shadow: 0 0 20px var(--accent-orange), 0 0 30px var(--accent-orange);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>🎯 <span class="highlight">צא מזה</span> – המשחק שכולם מדברים עליו!</h1>
+            <p class="subtitle">ברוכים הבאים לעולם שבו הצחוק גובר על הכול</p>
+            <p style="font-size: 20px; margin-top: 30px;">
+                <strong>"צא מזה"</strong> הוא משחק קלפים חברתי, שידליק כל ערב עם החברים, המשפחה או השותפים לדירה. 
+                חוקים פשוטים, משימות קורעות, שאלות נועזות ואתגרי שתייה בלתי צפויים – והכול במטרה אחת: 
+                לגרום לכם <span class="glow-text">לצאת מזה</span> וליהנות מהרגע 💥
+            </p>
+        </section>
+
+        <!-- How to Play Section -->
+        <section class="section">
+            <h2>🍻 איך משחקים?</h2>
+            <p>
+                שלפו קלף, קראו בקול, ובצעו את מה שכתוב עליו. כל קלף יכניס אתכם לסיטואציה חדשה – 
+                לפעמים מצחיקה, לפעמים נועזת, תמיד מפתיעה. אין מנצחים ואין מפסידים – 
+                רק <strong style="color: var(--yellow);">חברים, שתייה וצחוקים אמיתיים.</strong>
+            </p>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section">
+            <h2>💬 למה תתאהבו בזה?</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">❗</div>
+                    <p>כי כל ערב הופך להרפתקה שונה</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🥂</div>
+                    <p>כי המשחק מתאים לכל חבורה – קטנה או גדולה</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤯</div>
+                    <p>כי אין לדעת מה הקלף הבא יביא איתו</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💛</div>
+                    <p>כי מאחורי כל צחוק יש גם רגע של חיבור אמיתי</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Story Section -->
+        <section class="story">
+            <h2>🌟 מאחורי הקלפים – סיפור אמיתי</h2>
+            <p>
+                "צא מזה" נולד מערבים של חברים, שיחות עמוקות וצחוקים בלי סוף, 
+                אבל גם מתוך רצון לזכור משהו חשוב: <strong>להיות אדיבים. לפרגן. לשמור אחד על השני.</strong>
+            </p>
+            <p class="dedication">
+                המשחק מוקדש לזכרו של עומר בלווה, לוחם שנפל במלחמת חרבות ברזל
+            </p>
+            <p>
+                והשאיר אחריו מורשת אחת פשוטה ויפה:
+            </p>
+            <div class="be-kind">Be Kind. As Balva. ❤</div>
+            <p style="margin-top: 30px;">
+                כי גם כשאנחנו שותים, צוחקים וזורמים – אנחנו תמיד יכולים לבחור בטוב.
+            </p>
+        </section>
+
+        <!-- Life is Short Section -->
+        <section class="section" style="text-align: center;">
+            <h2 style="justify-content: center;">⚠ החיים קצרים מדי בשביל לקחת הכול ברצינות</h2>
+            <p style="font-size: 24px; color: var(--accent-orange);">
+                אז תתאספו, תמזגו, ותראו מי באמת יודע "לצאת מזה".
+            </p>
+        </section>
+
+        <!-- Product Image -->
+        <div class="product-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect fill='%231a1a2e' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' fill='%23fa500f' font-size='48' font-weight='bold' text-anchor='middle' dominant-baseline='middle'%3Eצא מזה%3C/text%3E%3Ctext x='50%25' y='65%25' fill='%23ffffff' font-size='20' text-anchor='middle'%3E[תמונת המשחק תופיע כאן]%3C/text%3E%3C/svg%3E" alt="צא מזה - משחק הקלפים">
+        </div>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <p style="font-size: 24px; margin-bottom: 20px;">📦 <strong>מחיר מיוחד להשקה:</strong></p>
+            <div class="price">89₪ בלבד</div>
+            <p style="font-size: 20px; margin-bottom: 40px;">🚚 משלוח מהיר לכל הארץ</p>
+            <a href="#" class="cta-button" onclick="alert('מעבר לעגלת הקניות'); return false;">
+                👉 הוסיפו לעגלה וקחו את הערב שלכם לשלב הבא!
+            </a>
+        </section>
+    </div>
+</body>
+</html>
