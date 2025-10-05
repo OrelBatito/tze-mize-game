@@ -1,275 +1,377 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="color-scheme" content="dark light" />
-<title>צא מזה — משחק הקלפים שידליק כל ערב</title>
-<meta name="description" content="צא מזה — משחק קלפים חברתי, קורע וצפוי להדביק את כל הערב בצחוק. מחיר השקה 99₪ (במקום 129₪). Be Kind. As Balva." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>צא מזה — המשחק שכולם מדברים עליו!</title>
 
-<!-- פונט Noot Regular (החלף לכתובת הפונט שלך/Google Fonts אם קיים) -->
-<style>
-/* TODO: החלף לנתיב הפונט בפועל (woff2) או הסר אם נטען חיצונית ב-Base44 */
-@font-face{
-  font-family:"Noot";
-  src:url("fonts/Noot-Regular.woff2") format("woff2");
-  font-weight:400;font-style:normal;font-display:swap;
-}
-@font-face{
-  font-family:"Assistant";
-  src:local("Assistant");
-  font-weight:100 800;
-  font-style:normal;
-  font-display:swap;
-}
-:root{
-  /* פלטת מותג */
-  --yellow:#fedf48;   /* כותרת/הדגשה */
-  --blue:#006cb4;     /* מבטים/אייקונים */
-  --bg:#1a1a2e;       /* רקע כהה */
-  --bg-true:#000000;  /* אופציה לרקע שחור מוחלט */
-  --fg:#ffffff;       /* טקסט ראשי */
-  --muted:#cfcfd6;    /* טקסט משני */
-  --accent:#fa500f;   /* כתום חם להדגשות משניות */
-  --cta:#cc2936;      /* אדום כפתורי CTA */
-  --card:#0e1020;     /* כרטיסים */
-  --border:rgba(255,255,255,.08);
-  --shadow:0 14px 40px rgba(0,0,0,.35);
-  --radius:18px;
-  --maxw:1120px;
-}
-@media (prefers-color-scheme: light){
-  :root{ --bg:#0f1326; }
-}
-/* בסיס טיפוגרפיה */
-*{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--fg);
-  font:16px/1.6 "Assistant", "Noot", system-ui, -apple-system, Segoe UI, Arial, Helvetica, sans-serif;
-}
-h1,h2,h3{margin:0 0 12px}
-h1{font:700 42px/1.15 "Noot","Assistant",sans-serif;color:var(--yellow);letter-spacing:.5px}
-h2{font:700 28px/1.2 "Assistant",sans-serif}
-h3{font:600 22px/1.3 "Assistant",sans-serif}
-p{margin:0 0 12px}
-.container{max-width:var(--maxw);margin:auto;padding:18px}
-.center{text-align:center}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  padding:14px 22px;border-radius:999px;border:1px solid transparent;
-  font-weight:800;cursor:pointer;transition:transform .06s ease, box-shadow .2s ease, background .2s ease;
-  user-select:none;text-decoration:none;
-}
-.btn-primary{background:var(--cta);color:#fff;box-shadow:var(--shadow)}
-.btn-primary:hover{transform:translateY(-1px)}
-.btn-ghost{background:transparent;border-color:#3b3b4a;color:#fff}
-.btn-ghost:hover{background:#14162a}
-.btn-wide{min-width:230px}
-.pill{display:inline-block;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:999px}
-.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)
-}
-.grid{display:grid;gap:18px}
-.grid.cols-2{grid-template-columns:1fr}
-.hero{position:relative;overflow:hidden;padding:92px 0 50px}
-.hero .lead{color:var(--muted);max-width:64ch}
+  <!-- ===== Brand / Fonts =====
+       שימי את קובץ הפונט כאן: /fonts/Noot-Regular.woff2
+       מומלץ לשים את תמונת המוצר ב: /assets/tsa-meze.jpg -->
+  <style>
+    @font-face{
+      font-family:"Noot";
+      src:url("fonts/Noot-Regular.woff2") format("woff2");
+      font-weight:400; font-style:normal; font-display:swap;
+    }
 
-/* רקע דינמי עדין – ללא ספריות */
-.bg-layer{
-  position:absolute;inset:-20% -10%;pointer-events:none;opacity:.25;
-  background:
-    radial-gradient(18px 18px at 12% 22%, var(--blue) 0 40%, transparent 42%) no-repeat,
-    radial-gradient(14px 14px at 80% 36%, var(--yellow) 0 45%, transparent 48%) no-repeat,
-    radial-gradient(10px 10px at 35% 78%, #fff 0 45%, transparent 48%) no-repeat,
-    radial-gradient(8px 8px at 60% 10%, var(--accent) 0 45%, transparent 48%) no-repeat;
-  animation:float 18s linear infinite;
-  filter:blur(0.5px) saturate(120%);
-}
-@keyframes float{
-  0%{transform:translate3d(0,0,0) rotate(0deg)}
-  50%{transform:translate3d(2%, -2%, 0) rotate(2deg)}
-  100%{transform:translate3d(0,0,0) rotate(0deg)}
-}
-/* אייקונים מרחפים (קוביות/כוסות/קלפים) */
-.floats{position:absolute;inset:0;pointer-events:none}
-.float{
-  position:absolute;opacity:.16;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));
-  animation: bob 7s ease-in-out infinite alternate;
-}
-.float svg{width:38px;height:38px}
-.float:nth-child(1){top:12%;left:12%;animation-duration:8s}
-.float:nth-child(2){top:22%;right:14%;animation-duration:7.4s}
-.float:nth-child(3){bottom:18%;left:20%;animation-duration:8.6s}
-.float:nth-child(4){bottom:10%;right:8%;animation-duration:9s}
-@keyframes bob{to{transform:translateY(-14px)}}
+    *{box-sizing:border-box; margin:0; padding:0}
+    :root{
+      --bg-dark:#0f1420;
+      --bg-darker:#0a0e16;
+      --text:#ffffff;
+      --muted:#cfd3dc;
+      --brand-blue:#006cb4;     /* כחול מותג */
+      --brand-yellow:#fedf48;   /* צהוב מותג */
+      --card:rgba(255,255,255,.06);
+      --border:rgba(255,255,255,.12);
+      --shadow:0 18px 48px rgba(0,0,0,.5);
+    }
 
-/* גלריה/קבוצות */
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.kudos{background:#12122a;border-inline-start:6px solid var(--blue);padding:18px;border-radius:14px}
+    body{
+      font-family:'Noot','Assistant','Arial','Helvetica',sans-serif;
+      color:var(--text);
+      background: linear-gradient(135deg,var(--bg-dark),var(--bg-darker));
+      min-height:100vh; overflow-x:hidden; line-height:1.6;
+    }
+    .container{max-width:1200px;margin:0 auto;padding:20px}
 
-/* פס רכישה צף */
-.bar{
-  position:sticky;bottom:0;inset-inline:0;background:rgba(10,10,18,.88);
-  backdrop-filter: blur(8px);border-top:1px solid var(--border);z-index:40;
-}
-.bar .container{display:flex;gap:12px;align-items:center;justify-content:space-between}
-.price{font-weight:900}
-.price s{opacity:.6;margin-inline-start:8px}
+    /* ================= BACKGROUND LAYERS ================= */
+    .bg{
+      position:fixed; inset:0; overflow:hidden; z-index:-1; background:#000;
+    }
+    .bg .gradient{
+      position:absolute; inset:0;
+      background:radial-gradient(60% 90% at 50% 0%, rgba(0,108,180,.18), transparent 60%),
+                 linear-gradient(135deg, #000 0%, #0a0e16 60%, #000 100%);
+    }
+    .glow{
+      position:absolute; width:26rem; height:26rem; border-radius:999px; filter:blur(60px); opacity:.22;
+    }
+    .glow.blue{right:20%; bottom:-6rem; background:radial-gradient(circle, #006cb480 0%, transparent 70%)}
+    .glow.yellow{left:20%; top:-6rem;   background:radial-gradient(circle, #fedf4880 0%, transparent 70%)}
 
-/* FAQ */
-details{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
-summary{cursor:pointer;font-weight:800}
+    /* Floating icons (SVG) */
+    .float-icon{
+      position:absolute; opacity:.12; width:3.5rem; height:3.5rem; transform-origin:center;
+      animation:floatY var(--dur,8s) ease-in-out var(--delay,0s) infinite,
+                spin calc(var(--dur,8s)*1.2) linear var(--delay,0s) infinite,
+                fadePulse calc(var(--dur,8s)*.9) ease-in-out var(--delay,0s) infinite;
+    }
+    .float-icon svg{width:100%; height:100%; filter:drop-shadow(0 0 20px rgba(255,255,255,.08))}
+    @keyframes floatY { 0%,100%{ transform:translateY(-12px) } 50%{ transform:translateY(12px) } }
+    @keyframes spin   { 0%{ rotate:0deg } 100%{ rotate:360deg } }
+    @keyframes fadePulse { 0%,100%{opacity:.06} 50%{opacity:.18} }
 
-/* רספונסיביות */
-section{padding:42px 0}
-@media (min-width:900px){
-  .grid.cols-2{grid-template-columns:repeat(2,1fr)}
-  .gallery{grid-template-columns:repeat(4,1fr)}
-  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
-}
-</style>
+    /* Twinkles */
+    .twinkle{position:absolute; width:4px; height:4px; background:#fff; border-radius:999px; opacity:0;
+      animation:twinkle var(--d,3s) ease-in-out var(--delay,0s) infinite}
+    @keyframes twinkle{ 0%,100%{opacity:0; transform:scale(0)} 50%{opacity:.9; transform:scale(1)} }
+
+    /* ================= CONTENT ================= */
+    .hero{ text-align:center; padding:120px 20px; position:relative }
+    .hero::before{
+      content:""; position:absolute; inset:auto 0 0 0; height:280px;
+      background:radial-gradient(closest-side, rgba(0,108,180,.35), transparent 70%);
+      filter:blur(40px); z-index:-1;
+    }
+    h1{
+      font-size:clamp(42px,8vw,72px); font-weight:900; letter-spacing:.5px; margin-bottom:16px;
+      text-shadow:0 8px 28px rgba(0,0,0,.45)
+    }
+    .highlight{ color:var(--brand-yellow); text-shadow:0 0 18px rgba(254,223,72,.45) }
+    .subtitle{ font-size:clamp(18px,3vw,24px); color:var(--brand-blue); margin-bottom:24px; font-weight:800 }
+    .muted{ color:var(--muted) }
+
+    .section{ padding:80px 20px; max-width:900px; margin:0 auto }
+    .section h2{ font-size:clamp(28px,5vw,42px); margin-bottom:22px; color:var(--brand-yellow) }
+    .section p{ font-size:clamp(16px,2.5vw,20px); margin-bottom:18px; max-width:70ch; margin-inline:auto }
+
+    .features{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; margin:48px 0 }
+    .feature-card{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:26px; text-align:center; backdrop-filter:blur(8px); transition:.25s }
+    .feature-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,108,180,.35); border-color:rgba(0,108,180,.45) }
+    .feature-icon{ font-size:44px; margin-bottom:10px }
+
+    .story{ background:linear-gradient(135deg, rgba(0,108,180,.2) 0%, transparent 100%); border-radius:20px; padding:54px 36px; margin:72px 0; text-align:center; border:1px solid var(--border) }
+
+    .product-image{ text-align:center; margin:72px 0; }
+    .product-image img{ max-width:100%; width:min(640px,90vw); height:auto; border-radius:18px; box-shadow:var(--shadow); animation:floatSoft 3.2s ease-in-out infinite }
+    @keyframes floatSoft{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-12px) } }
+
+    .cta-section{ text-align:center; padding:90px 20px }
+    .price-wrap{ display:flex; align-items:center; justify-content:center; gap:14px; margin:10px 0 14px }
+    .old-price{ color:#9aa3b2; text-decoration:line-through; text-decoration-thickness:3px; text-decoration-color:rgba(255,255,255,.5); font-weight:800; font-size:22px }
+    .price{ font-size:clamp(48px,8vw,72px); font-weight:900; color:var(--brand-yellow); text-shadow:0 0 28px rgba(254,223,72,.35) }
+    .badge{ display:inline-block; background:linear-gradient(135deg,var(--brand-yellow),#ffe982); color:#222; padding:6px 12px; border-radius:999px; font-weight:900 }
+
+    .cta-button{ display:inline-block; padding:20px 48px; border-radius:999px; font-size:clamp(18px,2.6vw,24px); font-weight:900; text-decoration:none; transition:.25s; position:relative }
+    .cta-primary{ background:linear-gradient(135deg,var(--brand-blue),#0b8bdc); color:#fff; box-shadow:0 14px 34px rgba(0,108,180,.45) }
+    .cta-primary:hover{ transform:translateY(-2px) }
+    .cta-primary[data-hover]:hover::after{ content:attr(data-hover); position:absolute; top:100%; left:50%; transform:translateX(-50%); margin-top:8px; font-size:14px; color:var(--muted); font-weight:700 }
+    .cta-secondary{ border:2px solid var(--brand-yellow); color:var(--brand-yellow); background:transparent }
+    .cta-secondary:hover{ background:rgba(254,223,72,.1) }
+
+    .ugc{ padding:80px 20px; border-top:1px solid var(--border); margin-top:40px }
+    .ugc .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-top:18px }
+    .ugc .grid img{ width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:12px; box-shadow:0 8px 28px rgba(0,0,0,.35) }
+
+    /* FAQ */
+    .faq{ display:grid; gap:12px }
+    .faq details{ background:#0c1320; border:1px solid var(--border); border-radius:14px; padding:14px 18px }
+    .faq summary{ cursor:pointer; list-style:none; font-weight:800; color:#e9eef7; display:flex; align-items:center; justify-content:space-between }
+    .faq summary::-webkit-details-marker{ display:none }
+    .faq summary::after{ content:'◀'; color:#e9eef7; opacity:.7; transition:transform .2s ease }
+    .faq details[open] summary::after{ transform:rotate(-90deg) }
+    .faq .answer{ color:var(--muted); padding-top:10px }
+
+    @media (max-width:768px){
+      .hero{ padding:90px 16px }
+      .section{ padding:60px 16px }
+      .story{ padding:40px 16px }
+      .cta-section{ padding:70px 16px }
+      .cta-button{ padding:18px 40px }
+      .features{ gap:16px }
+      .feature-card{ padding:20px }
+    }
+  </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="bg-layer"></div>
-  <div class="floats" aria-hidden="true">
-    <!-- אייקונים וקטוריים פשוטים (קובייה/כוס/קלף). אפשר להחליף לקבצי SVG שלך -->
-    <div class="float" style="color:var(--blue)"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><circle cx="15" cy="15" r="1.6"/></svg></div>
-    <div class="float" style="color:var(--yellow)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12l-2 15a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3L6 3z"/></svg></div>
-    <div class="float" style="color:#fff"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="2" width="12" height="20" rx="2"/></svg></div>
-    <div class="float" style="color:var(--accent)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10h10v2H7zM7 6h10v2H7zM7 14h10v2H7z"/></svg></div>
-  </div>
+  <!-- ===== Animated Background (no libs) ===== -->
+  <div class="bg" aria-hidden="true">
+    <div class="gradient"></div>
+    <div class="glow yellow"></div>
+    <div class="glow blue"></div>
+    <canvas id="particles" class="particles" style="position:absolute; inset:0; pointer-events:none;"></canvas>
 
-  <div class="container hero-grid">
-    <div>
-      <h1>צא מזה</h1>
-      <p class="lead">
-        משחק קלפים חברתי, קורע ומפתיע — משימות, טוויסטים ושאלות נועזות עם טאץ׳ ישראלי.
-        <b>אין מנצחים ואין מפסידים — רק חברים, משקה ואווירה טובה.</b>
-      </p>
-      <div class="grid">
-        <div class="pill">❤ Be Kind. As Balva — לזכרו של עומר בלווה ז״ל</div>
-        <div class="grid" style="grid-auto-flow:column;gap:10px;justify-content:flex-start">
-          <a href="#buy" class="btn btn-primary btn-wide">🔥 כן! אני רוצה לצאת מזה</a>
-          <a href="#how" class="btn btn-ghost btn-wide">🕹 תן/י קלף דמו</a>
-        </div>
-      </div>
+    <!-- Floating SVG icons -->
+    <!-- Spade -->
+    <div class="float-icon" style="left:10%; top:15%; --dur:8s; --delay:0s">
+      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
+        <path d="M32 6C20 18 10 25 10 34a10 10 0 1 0 20 0h4a10 10 0 1 0 20 0C54 25 44 18 32 6zM27 40h10l-4 10h-6l0-10z"/>
+      </svg>
     </div>
-    <div class="center">
-      <!-- החלף לתמונת קופסה/מוקאפ -->
-      <img src="hero-box.jpg" alt="קופסת המשחק צא מזה וקלפים פתוחים" style="max-width:520px;border-radius:16px" />
+    <!-- Heart -->
+    <div class="float-icon" style="left:80%; top:65%; --dur:11s; --delay:.5s">
+      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
+        <path d="M32 56s-4-3-10-8C12 42 6 36 6 28a12 12 0 0 1 22-7 12 12 0 0 1 22 7c0 8-6 14-16 20-6 5-10 8-10 8z"/>
+      </svg>
     </div>
-  </div>
-</header>
-
-<main>
-<section id="how" class="container grid cols-2">
-  <div class="card">
-    <h2 style="color:var(--blue)">איך משחקים — ב-60 שניות</h2>
-    <p>השראה בלבד, לא “ספר חוקים” על המסך:</p>
-    <ul style="margin:8px 0 0 0; padding:0 0 0 18px">
-      <li>כל שחקן בוחר מספר אישי.</li>
-      <li>מטילים קובייה — מי שיצא עליו מפעיל את הסיבוב.</li>
-      <li>המפעיל בוחר “פועל” ששולף קלף, מקריא ומבצע.</li>
-      <li>הצלחת? כולם נהנים. סירבת/נכשלת? שוט. ממשיכים!</li>
-      <li>יש קלפי החלפה שמערבבים מספרים ועושים בלאגן טוב.</li>
-    </ul>
-    <p class="pill" style="margin-top:10px">18+ | שחקו באחריות | Be Kind</p>
-  </div>
-
-  <div class="card">
-    <h3>למה זה ממכר?</h3>
-    <p>כל ערב נראה אחרת, מתאים לכל חבורה, ואף פעם לא יודעים איזה קלף יגיע. מאחורי הצחוק — חיבור אמיתי.</p>
-    <div class="grid" style="grid-auto-flow:column;gap:10px;margin-top:10px">
-      <a href="#whatsin" class="btn btn-primary">📦 מה יש בקופסה</a>
-      <a href="#categories" class="btn btn-ghost">🤯 סוגי קלפים</a>
+    <!-- Diamond -->
+    <div class="float-icon" style="left:25%; top:40%; --dur:7s; --delay:1.5s">
+      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
+        <path d="M32 4 58 32 32 60 6 32 32 4z"/>
+      </svg>
     </div>
-  </div>
-</section>
-
-<section id="whatsin" class="container">
-  <h2 class="center" style="color:var(--blue)">מה יש בקופסה</h2>
-  <div class="grid cols-2">
-    <div class="card">
-      <ul style="margin:0; padding:0 0 0 18px">
-        <li>~70 קלפים בקטגוריות שונות (משימות, שאלות, טוויסטים ומיני־משחקים).</li>
-        <li>קלפי מספרים 1–12 לכל שחקן.</li>
-        <li>3 קלפי החלפה שמטלטלים את המשחק.</li>
-        <li>קובייה אחת/שתיים + דף הוראות.</li>
-        <li>גב כל קלף: לוגו <b>Be Kind Omer</b>.</li>
-      </ul>
+    <!-- Club -->
+    <div class="float-icon" style="left:70%; top:45%; --dur:8.5s; --delay:2.5s">
+      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
+        <path d="M22 26a10 10 0 1 1 18-6 10 10 0 1 1 8 18 10 10 0 1 1-18 6h-4l-2 10h-6l2-10a10 10 0 0 1 8-18z"/>
+      </svg>
     </div>
-    <div class="gallery" aria-label="הצצה לקלפים">
-      <!-- החלף לתמונות מהחומר שלך -->
-      <img src="card-back.jpg" alt="גב קלף עם לוגו Be Kind Omer">
-      <img src="card-truth.jpg" alt="קלף אמת — שתי חוויות, אחת אמת">
-      <img src="card-twist.jpg" alt="קלף טוויסט — פלאפון ביד? שותה">
-      <img src="card-challenge.jpg" alt="קלף אתגר — משימה יצירתית">
+    <!-- Dice -->
+    <div class="float-icon" style="left:50%; top:10%; --dur:8.5s; --delay:2s">
+      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
+        <rect x="10" y="10" width="44" height="44" rx="8" ry="8" stroke="none"/>
+        <circle cx="22" cy="22" r="3" fill="#000"/>
+        <circle cx="32" cy="32" r="3" fill="#000"/>
+        <circle cx="42" cy="42" r="3" fill="#000"/>
+      </svg>
     </div>
-  </div>
-</section>
+    <!-- Wine glass -->
+    <div class="float-icon" style="left:85%; top:20%; --dur:10s; --delay:1s">
+      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
+        <path d="M18 6h28c0 10-5 18-14 18S18 16 18 6zm13 18h2v20h10v4H16v-4h10V24z"/>
+      </svg>
+    </div>
+    <!-- Beer mug -->
+    <div class="float-icon" style="left:5%; top:85%; --dur:9.5s; --delay:1s">
+      <svg viewBox="0 0 64 64" fill="currentColor" style="color:var(--brand-yellow)">
+        <path d="M12 18h28v34H12zM40 22h8a6 6 0 0 1 0 12h-8" stroke="none"/>
+      </svg>
+    </div>
 
-<section id="categories" class="container">
-  <h2 class="center" style="color:var(--blue)">סוגי קלפים</h2>
-  <div class="grid cols-2">
-    <div class="card"><h3>אמת</h3><p>שאלות נועזות וחשיפה קלילה — “ספר/י 2 חוויות, רק אחת אמת”.</p></div>
-    <div class="card"><h3>אתגר</h3><p>משימות קצרות, לפעמים מביכות, תמיד מצחיקות. נכשלת? שותה.</p></div>
-    <div class="card"><h3>טוויסט</h3><p>חוק קטן שמחליף את הכללים לרגע — “מי שמחזיק פלאפון — שותה”.</p></div>
-    <div class="card"><h3>אדיבות</h3><p>קלפים עם המסר: “פשוט — תהיה אדיב, תהיה כמו עומר”.</p></div>
+    <!-- Twinkles will be injected by JS -->
+    <div id="twinkles"></div>
   </div>
-</section>
 
-<section class="container">
-  <div class="kudos">
-    <h3>Be Kind. As Balva.</h3>
-    <p>מוקדש לזכרו של עומר בלווה ז״ל. צחוקים זו חובה, אבל תמיד בכבוד, בפרגון ובאחריות.</p>
-  </div>
-</section>
-
-<section id="buy" class="container center">
-  <h2>מחיר השקה: <span style="color:var(--yellow)">99₪</span> <small class="price"><s>129₪</s></small></h2>
-  <p>משלוח מהיר לכל הארץ • מלאי מוגבל להשקה</p>
-  <div style="margin-top:12px">
-    <a href="/checkout" class="btn btn-primary btn-wide" aria-label="הוספה לעגלה">🛒 הוסיפו לעגלה</a>
-    <a href="#faq" class="btn btn-ghost btn-wide">❓ שאלות נפוצות</a>
-  </div>
-</section>
-
-<section id="community" class="container">
-  <h2 class="center" style="color:var(--blue)">תראו איך אתם משחקים</h2>
-  <p class="center">שתפו סטורי/ריל עם ההאשטאג <b>#צאמזה</b> ותיכנסו להגרלה 🎁</p>
-  <div class="center" style="margin:12px 0 18px">
-    <a href="https://instagram.com/" class="btn btn-primary">📣 שתפו ריל — היכנסו להגרלה</a>
-  </div>
-  <div class="gallery" aria-label="דוגמאות מרחבי הרשת">
-    <!-- החלף ל-UGC אמתיים -->
-    <img src="ugc-1.jpg" alt="חברים משחקים צא מזה">
-    <img src="ugc-2.jpg" alt="ריל מסיבה — צא מזה">
-    <img src="ugc-3.jpg" alt="דייט זוגי עם המשחק">
-    <img src="ugc-4.jpg" alt="צימר בסופ״ש — צא מזה">
-  </div>
-</section>
-
-<section id="faq" class="container grid cols-2">
-  <details><summary>לכמה שחקנים?</summary><p>3–12. עד 6 שחקנים עם קובייה אחת; מעל 6 — שתי קוביות.</p></details>
-  <details><summary>זה חייב לכלול אלכוהול?</summary><p>אפשר לשחק גם בגרסת נקודות/זרימה — בלי שתייה. הכיף נשאר.</p></details>
-  <details><summary>למי זה מתאים?</summary><p>סטודנטים, חבורות ערב, משפחות בוגרות, סופ״ש בצימר — מיועד לגיל 18+.</p></details>
-  <details><summary>מה יש בקופסה?</summary><p>~70 קלפים, קלפי מספרים, 3 קלפי החלפה, קוביות ודף הוראות.</p></details>
-</section>
-</main>
-
-<!-- פס CTA צף -->
-<div class="bar" role="region" aria-label="פס רכישה">
+  <!-- ===================== CONTENT ===================== -->
   <div class="container">
-    <span class="price">🔥 מחיר השקה <b>99₪</b> <s>129₪</s></span>
-    <div>
-      <a href="/checkout" class="btn btn-primary">אני בפנים</a>
-      <a href="#community" class="btn btn-ghost">📸 #צאמזה</a>
-    </div>
-  </div>
-</div>
+    <!-- HERO -->
+    <section class="hero">
+      <h1>🎯 <span class="highlight">צא מזה</span> – המשחק שכולם מדברים עליו!</h1>
+      <p class="subtitle">משחק קלפים חברי, קורע ומפתיע — משימות, טוויסטים ושאלות נועזות עם נשיקה ישראלית. 🍻</p>
+      <p class="muted" style="font-size:20px;margin-top:10px">הקוביה קובעת, אך הקלף מחליט — ערב חדש בכל חפיסה.</p>
 
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap">
+        <a href="#buy" class="cta-button cta-primary" data-hover="יחידה מוגבלת בהשקה — קח/י ערב שונה">🔥 כן! אני רוצה לצאת מזה</a>
+        <a href="#" class="cta-button cta-secondary" id="demoBtn">🕹 תן/י לי קלף דמו — הדגמה</a>
+      </div>
+    </section>
+
+    <!-- איך משחקים -->
+    <section class="section">
+      <h2>🍻 איך משחקים?</h2>
+      <p>
+        שלפו קלף, קראו בקול, ובצעו את מה שכתוב עליו. כל קלף יכניס אתכם לסיטואציה חדשה –
+        לפעמים מצחיקה, לפעמים נועזת, תמיד מפתיעה. אין מנצחים ואין מפסידים –
+        רק <strong style="color:var(--brand-yellow)">חברים, שתייה וצחוקים אמיתיים.</strong>
+      </p>
+    </section>
+
+    <!-- למה תתאהבו -->
+    <section class="section">
+      <h2>💬 למה תתאהבו בזה?</h2>
+      <div class="features">
+        <div class="feature-card"><div class="feature-icon">❗</div><p>כל ערב הופך להרפתקה שונה</p></div>
+        <div class="feature-card"><div class="feature-icon">🥂</div><p>מתאים לכל חבורה – קטנה או גדולה</p></div>
+        <div class="feature-card"><div class="feature-icon">🤯</div><p>אין לדעת מה הקלף הבא יביא</p></div>
+        <div class="feature-card"><div class="feature-icon">💛</div><p>צחוק שמחבר בין אנשים</p></div>
+      </div>
+    </section>
+
+    <!-- סיפור -->
+    <section class="story">
+      <h2>🌟 מאחורי הקלפים – סיפור אמיתי</h2>
+      <p>"צא מזה" נולד מערבים של חברים, שיחות עמוקות וצחוקים בלי סוף — וגם מהרצון לזכור:</p>
+      <p class="dedication">להיות אדיבים. לפרגן. לשמור אחד על השני.</p>
+      <div class="be-kind">Be Kind. As Balva. ❤</div>
+    </section>
+
+    <!-- תמונת מוצר -->
+    <div class="product-image">
+      <!-- מומלץ לשים את הקובץ בשם באנגלית ללא רווחים: /assets/tsa-meze.jpg -->
+      <img src="assets/tsa-meze.jpg" alt="צא מזה - משחק הקלפים" />
+    </div>
+
+    <!-- CTA / מחיר -->
+    <section class="cta-section" id="buy">
+      <span class="badge" aria-hidden="true">מחיר השקה</span>
+      <div class="price-wrap" role="text">
+        <div class="old-price">129₪</div>
+        <div class="price">99₪</div>
+      </div>
+      <p class="muted" style="margin-bottom:24px">🚚 משלוח מהיר לכל הארץ • מלאי מוגבל להשקה</p>
+      <a href="#checkout" class="cta-button cta-primary">🛒 הוסיפו לעגלה — קחו את הערב הבא</a>
+    </section>
+
+    <!-- UGC / שיתופים -->
+    <section class="ugc">
+      <h2>תראו איך אתם משחקים</h2>
+      <p class="muted">שתפו סטורי/ריל עם ההאשטג <strong>#צאמזה</strong> ותיכנסו להגרלה.</p>
+      <div style="margin:14px 0 18px">
+        <a href="#" class="cta-button cta-secondary">📸 שתפו ריל — תיכנסו להגרלה</a>
+      </div>
+      <div class="grid" aria-label="דוגמאות מתוכן גולשים">
+        <img src="assets/tsa-meze.jpg" alt="UGC 1" />
+        <img src="assets/tsa-meze.jpg" alt="UGC 2" />
+        <img src="assets/tsa-meze.jpg" alt="UGC 3" />
+        <img src="assets/tsa-meze.jpg" alt="UGC 4" />
+        <img src="assets/tsa-meze.jpg" alt="UGC 5" />
+        <img src="assets/tsa-meze.jpg" alt="UGC 6" />
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <h2>❓ שאלות נפוצות</h2>
+      <div class="faq">
+        <details>
+          <summary>לכמה משחקנים?</summary>
+          <div class="answer">3–12 שחקנים. עד 6 עם קובייה אחת; מעל 6 — שתי קוביות.</div>
+        </details>
+        <details>
+          <summary>זה חייב לכלול אלכוהול?</summary>
+          <div class="answer">אפשר לשחק גם בגרסת נקודות/זרימה — בלי שתייה. הכריך נשאר, הצחוק נשפך 🙂</div>
+        </details>
+        <details>
+          <summary>מה יש בקופסה?</summary>
+          <div class="answer">כ־100 קלפים מגוונים, קלפי מספרים, 3 קלפי החלפה, קוביות ודף הוראות.</div>
+        </details>
+        <details>
+          <summary>למי זה מתאים?</summary>
+          <div class="answer">סטודנטים, חבורות ערב, משפחות בוגרות, סופ״ש בצימר — מיועד לגיל 18+.</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- פוטר קצר -->
+    <section class="section" style="padding-top:24px">
+      <p class="muted" style="text-align:center;font-size:14px">
+        מיועד ל-18+. שחקו באחריות. לזכר עומר בלווה ז״ל — Be Kind. As Balva. • מדיניות משלוח • תנאי שימוש.
+      </p>
+    </section>
+  </div>
+
+  <!-- ====== Minimal JS for background + modal demo ====== -->
+  <script>
+    // Canvas particles (small rotating squares)
+    (function(){
+      const c = document.getElementById('particles');
+      const ctx = c.getContext('2d');
+      const colors = ['#fedf48', '#006cb4', '#ffffff', '#87CEEB'];
+      const particles = [];
+      const COUNT = 34;
+
+      function resize(){ c.width = innerWidth; c.height = innerHeight }
+      addEventListener('resize', resize); resize();
+
+      for(let i=0;i<COUNT;i++){
+        particles.push({
+          x: Math.random()*c.width,
+          y: Math.random()*c.height,
+          vx:(Math.random()-.5)*.5,
+          vy:(Math.random()-.5)*.5,
+          size: Math.random()*3+1,
+          color: colors[(Math.random()*colors.length)|0],
+          rot: Math.random()*Math.PI*2,
+          vr: (Math.random()-.5)*.02
+        });
+      }
+
+      function step(){
+        ctx.clearRect(0,0,c.width,c.height);
+        ctx.globalAlpha = 0.3;
+        particles.forEach(p=>{
+          p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
+          if(p.x<0||p.x>c.width) p.vx*=-1;
+          if(p.y<0||p.y>c.height) p.vy*=-1;
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle=p.color;
+          ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
+          ctx.restore();
+        });
+        requestAnimationFrame(step);
+      }
+      step();
+    })();
+
+    // Twinkles
+    (function(){
+      const wrap = document.getElementById('twinkles');
+      const N = 24;
+      for(let i=0;i<N;i++){
+        const d = document.createElement('div');
+        d.className='twinkle';
+        d.style.left = Math.random()*100 + '%';
+        d.style.top = Math.random()*100 + '%';
+        d.style.setProperty('--d', (Math.random()*3+2)+'s');
+        d.style.setProperty('--delay', (Math.random()*2)+'s');
+        wrap.appendChild(d);
+      }
+    })();
+
+    // Simple demo modal (optional)
+    const demoBtn = document.getElementById('demoBtn');
+    if(demoBtn){
+      demoBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        alert('קלף דמו: "כל מי שמחזיק טלפון ביד — שותה." (דוגמה 😅)');
+      });
+    }
+  </script>
 </body>
 </html>
